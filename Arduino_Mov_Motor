@@ -1,0 +1,66 @@
+#define PWMA 9
+#define AIN1 7
+#define AIN2 8
+#define STBY 2
+
+int velocidad = 0;
+int paso = 5;      // qué tan rápido cambia la velocidad
+int delayStep = 50; // tiempo entre cambios
+
+void setup() {
+  pinMode(PWMA, OUTPUT);
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(STBY, OUTPUT);
+
+  digitalWrite(STBY, HIGH); // activar driver
+}
+
+void loop() {
+  delay(2000);
+
+  // ----------- GIRO 1 -----------
+  adelante();
+
+  // subir velocidad
+  for (velocidad = 60; velocidad <= 255; velocidad += paso) {
+    analogWrite(PWMA, velocidad);
+    delay(delayStep);
+  }
+
+  // bajar velocidad
+  for (velocidad = 255; velocidad >= 0; velocidad -= paso) {
+    analogWrite(PWMA, velocidad);
+    delay(delayStep);
+  }
+
+  delay(500);
+
+  // ----------- GIRO 2 -----------
+  atras();
+
+  // subir velocidad
+  for (velocidad = 60; velocidad <= 255; velocidad += paso) {
+    analogWrite(PWMA, velocidad);
+    delay(delayStep);
+  }
+
+  // bajar velocidad
+  for (velocidad = 255; velocidad >= 0; velocidad -= paso) {
+    analogWrite(PWMA, velocidad);
+    delay(delayStep);
+  }
+
+  delay(500);
+}
+
+// Funciones de dirección
+void adelante() {
+  digitalWrite(AIN1, HIGH);
+  digitalWrite(AIN2, LOW);
+}
+
+void atras() {
+  digitalWrite(AIN1, LOW);
+  digitalWrite(AIN2, HIGH);
+}
