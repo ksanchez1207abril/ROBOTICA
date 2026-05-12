@@ -1,0 +1,76 @@
+// Pines del sensor ultrasónico
+const int trigPin = 9;
+const int echoPin = 10;
+
+// Pines de LEDs
+const int led1 = 2;
+const int led2 = 3;
+const int led3 = 4;
+const int led4 = 5;
+
+long duracion;
+int distancia;
+
+void setup() {
+
+  // Sensor
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  // LEDs
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+  pinMode(led4, OUTPUT);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+
+  // Limpiar TRIG
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Enviar pulso ultrasónico
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Leer tiempo del eco
+  duracion = pulseIn(echoPin, HIGH);
+
+  // Calcular distancia
+  distancia = duracion * 0.034 / 2;
+
+  // Mostrar distancia
+  Serial.print("Distancia: ");
+  Serial.print(distancia);
+  Serial.println(" cm");
+
+  // Apagar todos primero
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
+
+  // Encender LEDs según distancia
+
+  if (distancia < 40) {
+    digitalWrite(led1, HIGH);
+  }
+
+  if (distancia < 30) {
+    digitalWrite(led2, HIGH);
+  }
+
+  if (distancia < 20) {
+    digitalWrite(led3, HIGH);
+  }
+
+  if (distancia < 10) {
+    digitalWrite(led4, HIGH);
+  }
+
+  delay(100);
+}
